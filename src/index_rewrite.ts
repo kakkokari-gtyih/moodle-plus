@@ -274,7 +274,7 @@
                     url: event.url,
                     state: (
                         (event.action == null || event.action.name !== '課題を新規に提出する' || event.action.actionable === false) ?
-                        (event.timeduration > 0 && event.timestart * 1000 > now.getTime()) ? 'notStarted' : 'unknown'
+                        (event.timeduration > 0 && event.timestart * 1000 > Date.now()) ? 'notStarted' : 'unknown'
                         : 'active'
                     ) as 'active' | 'unknown' | 'notStarted',
                 }))
