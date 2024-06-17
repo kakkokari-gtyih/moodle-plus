@@ -272,9 +272,13 @@
                     assignmentTitle: event.activityname,
                     dueDate: (event.timestart + event.timeduration) * 1000,
                     url: event.url,
-                    hasSubmitted: (event.action == null || event.action.name !== '課題を新規に提出する' || event.action.actionable === false),
+                    state: (
+                        (event.action == null || event.action.name !== '課題を新規に提出する' || event.action.actionable === false) ?
+                        (event.timeduration > 0 && event.timestart * 1000 > now.getTime()) ? 'notStarted' : 'unknown'
+                        : 'active'
+                    ) as 'active' | 'unknown' | 'notStarted',
                 }))
-                .filter((event) => event.dueDate > now.getTime() || !event.hasSubmitted) // 期限切れの提出済み課題を除外
+                .filter((event) => event.dueDate > now.getTime() || event.state !== 'unknown') // 期限切れの提出済み課題を除外
                 .sort((a, b) => a.dueDate - b.dueDate) // 期限が近い順にソート
                 .filter((event) => {
                     // 掲載する個数制限
@@ -295,13 +299,13 @@
             const htmledAssignments = parsedAssignments.map((assignment, i) => {
                 const dueDate = new Date(assignment.dueDate);
                 const dueDateString = `${dueDate.getMonth() + 1}月${dueDate.getDate()}日 ${dateToString(dueDate, false)}`;
-                return `<div class="card my-2" ${!assignment.hasSubmitted && 'style="border: 4px solid #f0ad4e;"'}>
+                return `<div class="card my-2" ${assignment.state === 'active' && 'style="border: 4px solid #f0ad4e;"'}>
     <div class="card-body">
         <h6 class="card-subtitle" style="margin-top: 0;">${assignment.courseName}</h6>
         <h5 class="card-title">${assignment.assignmentTitle}</h5>
         <div style="display: flex; justify-content: space-between; align-items: flex-end;">
             <h6 class="card-subtitle mb-2 text-muted">${dueDateString}<br/>残り時間>> <span class="left_realtime_clock" data-moodle-plus-event-id="${assignment.eventId}"></span></h6>
-            <a href="${assignment.url}" class="btn btn-${assignment.hasSubmitted ? 'secondary' : 'warning'} num-${i}" style="height: fit-content; ${!assignment.hasSubmitted && 'font-weight: 700;'}">${assignment.hasSubmitted ? '課題を確認する' : '未提出'}</a>
+            <a href="${assignment.url}" class="btn btn-${assignment.state === 'active' ? 'warning' : 'secondary'} num-${i}" style="height: fit-content; ${assignment.state === 'active' && 'font-weight: 700;'}">${assignment.state === 'active' ? '未提出' : assignment.state === 'notStarted' ? '開始前' : '課題を確認する'}</a>
         </div>
     </div>
 </div>`;
