@@ -1,4 +1,4 @@
-import { experimentalCompatibleWebsiteHostnames } from '@/const';
+import { currentSite } from '@/current-site';
 import type {
     MoodleEvent,
     GetActionEventsByTimesortRes,
@@ -19,7 +19,10 @@ function main() {
     console.log("[Moodle Plus] content script script loaded");
     console.log("[Moodle Plus] UserStatus: logged in : " + isLoggedin());
 
-    if (window.location.pathname === "/" && isLoggedin()) {
+    if ((
+        currentSite?.hostname === window.location.hostname &&
+        (currentSite?.basePath == null || window.location.pathname.replace(/\/$/, '') === currentSite.basePath)
+    ) && isLoggedin()) {
         changeTitle();
         minimizeNewsFeed();
         showUpcomingAsignments();
@@ -107,9 +110,9 @@ async function changeTitle() {
             バグなどの報告は<a href="https://github.com/tomo0611/moodle-plus" target="_blank">こちら</a>までお願いします。`;
             title.parentElement?.insertBefore(subtitle, title.nextElementSibling);
 
-            if (experimentalCompatibleWebsiteHostnames.includes(window.location.hostname)) {
+            if (currentSite?.experimental) {
                 const warning = document.createElement("div");
-                warning.innerText = `Moodle Plus はこの Moodle (${window.location.hostname}) には試験的に対応しています。動作確認が不十分なため、一部の機能が使用できなかったり、Moodle の操作に支障をきたしたりする可能性があります。使用中に問題が発生した場合は Moodle Plus を無効化してください。`
+                warning.innerText = `Moodle Plus はこの Moodle (${currentSite.hostname}) には試験的に対応しています。動作確認が不十分なため、一部の機能が使用できなかったり、Moodle の操作に支障をきたしたりする可能性があります。使用中に問題が発生した場合は Moodle Plus を無効化してください。`
                 warning.className = "alert alert-warning mx-3 mb-4";
                 document.getElementById('page-content')?.parentElement?.insertBefore(warning, document.getElementById('page-content'));
             }
