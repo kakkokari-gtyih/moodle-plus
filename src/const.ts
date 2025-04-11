@@ -18,6 +18,7 @@ export const sites: SiteConfig[] = [
         hostname: 'stack.mathedu.jp',
         basePath: '/moodle',
         name: '大阪公立大学 (mathedu)',
+        experimental: true,
     },
     {
         hostname: 'moodle.s.kyushu-u.ac.jp',
