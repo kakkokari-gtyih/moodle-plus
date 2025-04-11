@@ -5,7 +5,13 @@ import type {
 } from '@/types/messages';
 
 export default defineContentScript({
-    matches: sites.map(site => `*://${site.hostname}${site.basePath ?? ''}/`), // トップページ
+    matches: sites.flatMap(site => [
+        `*://${site.hostname}${site.basePath ?? ''}/`,
+        `*://${site.hostname}${site.basePath ?? ''}/?*`,
+        `*://${site.hostname}${site.basePath ?? ''}/index.php`,
+        `*://${site.hostname}${site.basePath ?? ''}/index.php?*`,
+    ]), // トップページ
+    allFrames: true,
     async main(ctx) {
         function postMessageToInjectedScript(data: PostMessageDataFromExtension[keyof PostMessageDataFromExtension]) {
             console.log('[Moodle Plus] Post message to injected script:', data);

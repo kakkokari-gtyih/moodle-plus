@@ -3,6 +3,7 @@ import type { MeaQsQuiz } from '@/types/moodle';
 
 export default defineContentScript({
     matches: sites.map((site) => `*://${site.hostname}${site.basePath ?? ''}/mod/meaqs/student/appraisals.php*`),
+    allFrames: true,
     main() {
         createLeaQsPDFButton();
 

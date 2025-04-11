@@ -7,6 +7,7 @@ export default defineContentScript({
         `*://${site.hostname}${site.basePath ?? ''}/mod/questionnaire/view.php*`,
         `*://${site.hostname}${site.basePath ?? ''}/mod/feedback/complete.php*`,
     ]),
+    allFrames: true,
     main() {
         oltEnhance();
     },
