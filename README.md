@@ -108,11 +108,10 @@ pnpm zip
 pnpm zip:firefox
 ```
 
-## プロジェクトのメンバー
-
-<2023 年度>
+## プロジェクトメンバー
 
 - @tomo0611 - 開発責任者
+- @kakkokari-gtyih - 共同開発者
 
 ## ライセンス (The MIT License)
 
