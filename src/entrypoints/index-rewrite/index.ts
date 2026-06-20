@@ -103,7 +103,7 @@ async function changeTitle() {
                 title.innerHTML += ` <a href="https://github.com/tomo0611/moodle-plus/blob/main/CHANGELOG.md" target="_blank" style="font-size: .9375rem;" class="badge badge-secondary">v${versionRes.payload.version}</a>`;
             }
             const subtitle = document.createElement("p");
-            subtitle.innerHTML = `Developed by <a href="https://tomo0611.jp/" target="_blank">tomo0611</a> (大阪公立大学 工学部 情報工)</br>
+            subtitle.innerHTML = `Developed by <a href="https://tomo0611.jp/" target="_blank">tomo0611</a> (大阪公立大学 情報学研究科 基幹情報学専攻)</br>
             バグなどの報告は<a href="https://github.com/tomo0611/moodle-plus" target="_blank">こちら</a>までお願いします。`;
             title.parentElement?.insertBefore(subtitle, title.nextElementSibling);
 
